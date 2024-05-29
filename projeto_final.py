@@ -2,8 +2,42 @@ from bs4 import BeautifulSoup
 import requests
 
 
-def tabela_das_estatistica():
-    print("Escolha dentre uma dessas estatisticas disponiveis para saber o top 25 na história da nba: \n" + "PPG - pontos por jogo; \n" + "RPG - rebotes por jogo; \n" + "APG - assistencias por jogo; \n" + "BPG - blocks por jogo; \n" + "SPG - roubos de bola por jogo; \n" + "FG% - porcentagem de acerto dos lançamentos; \n" + "FT% - porcentagem de acerto dos lances livre; \n" + "3FG% - porcentagem de acerto do triplo. \n")
+def tabela_das_estatisticas_acumulativas():
+    print("Estatisticas acumulativas: \n" + "Lideres de pontos(LDP); \n" + "Lideres de rebotes(LDR); \n" + "Lideres de assistencias(LDA); \n" + "Lideres de blocks(LDB); \n" + "Lideres de roubos de bola(LDRB); \n" + "Lideres de cestos feitos(LDCF); \n" + "lideres de lances livres feitos(LDLLF); \n" + "lideres de triplos feitos(LDTF). \n")
+
+def ldp():
+    page_to_scrape = requests.get("https://www.statmuse.com/nba/ask?q=most+points+made+all-time")
+    soup = BeautifulSoup(page_to_scrape.text, "html.parser")
+    ldps = soup.find_all("text", limit=25, attrs={"class":"fill-black"})
+    atletas = soup.find_all("td", limit=25, attrs={"class":"text-left px-2 py-1 sticky left-0 bg-white"})
+
+    for ldp, atleta in zip(ldps, atletas):
+        print(ldp.text + " - " + atleta.text)
+
+def ldr():
+    page_to_scrape = requests.get("https://www.statmuse.com/nba/ask?q=most+rebounds+of+all-time")
+    soup = BeautifulSoup(page_to_scrape.text, "html.parser")
+    ldrs = soup.find_all("text", limit=25, attrs={"class":"fill-black"})
+    atletas = soup.find_all("td", limit=25, attrs={"class":"text-left px-2 py-1 sticky left-0 bg-white"})
+    
+    for ldr, atleta in zip(ldrs, atletas):
+        print(ldr.text + " - " + atleta.text)
+
+def lda():
+    page_to_scrape = requests.get("https://www.statmuse.com/nba/ask?q=most+assists+of+all-time")
+    soup = BeautifulSoup(page_to_scrape.text, "html.parser")
+    ldas = soup.find_all("text", limit=25, attrs={"class":"fill-black"})
+    atletas = soup.find_all("td", limit=25, attrs={"class":"text-left px-2 py-1 sticky left-0 bg-white"})
+
+    for lda, atleta in zip(ldas, atletas):
+        print(lda.text + " - " + atleta.text)
+
+"---------------------------------"
+
+
+
+def tabela_das_estatisticas_por_jogo():
+    print("Estatisticas por jogo: \n" + "Pontos por jogo(PPG); \n" + "Rebotes por jogo(RPG); \n" + "Assistencias por jogo(APG); \n" + "Blocks por jogo(BPG); \n" + "Roubos de bola por jogo(SPG); \n" + "Porcentagem de acerto dos lançamentos(FG%); \n" + "Porcentagem de acerto dos lances livre(FT%); \n" + "Porcentagem de acerto do triplo(3FG%). \n")
 
 def ppg():
     page_to_scrape = requests.get("https://www.statmuse.com/nba/ask?q=all-time+ppg+leaders")
@@ -78,44 +112,70 @@ def three_fg():
         print(three_fg.text + " - " + atleta.text)
 
 def base():
-    tabela_das_estatistica()
-    escolha = input("escolha(escreva a sigla da estatistica que quer saber): ").upper() 
-    
-    stats_list = ["PPG", "RPG", "APG", "BPG", "SPG", "FG%", "FT%", "3FG%"]
-
-    while escolha not in stats_list:
-        print("\nNão está dentre as estatisticas que atualmente possa reconhecer ou escreveste errado! ")
+    tipo_de_estatistica = ["EA", "EPJ"]
+    print("Estatistica acumulativa(EA);")
+    print("Estatistica por jogo(EPJ).")
+    escolha_do_tipo_de_estatistica = input("Escolha a estatistica que queira saber sobre(escreva a sigla): ").upper()
+    while escolha_do_tipo_de_estatistica not in tipo_de_estatistica:
+        print("Escreveste errado(EPJ - Estatistica por jogo / EA - Estatistica acumulativa)!")
+        escolha_do_tipo_de_estatistica = input("Escolha a estatistica que queira saber sobre(escreva a sigla): ").upper()
+    if escolha_do_tipo_de_estatistica == "EPJ":
+        tabela_das_estatisticas_por_jogo()
         escolha = input("escolha(escreva a sigla da estatistica que quer saber): ").upper() 
-    if escolha == "PPG":
-        ppg()
+    
+        per_game_stats_list = ["PPG", "RPG", "APG", "BPG", "SPG", "FG%", "FT%", "3FG%"]
 
-    elif escolha == "RPG":
-        rpg()
+        while escolha not in per_game_stats_list:
+            print("\nNão está dentre as estatisticas que atualmente possa reconhecer ou escreveste errado! ")
+            escolha = input("escolha(escreva a sigla da estatistica que quer saber): ").upper() 
+        if escolha == "PPG":
+            ppg()
 
-    elif escolha == "BPG":
-        bpg()
+        elif escolha == "RPG":
+            rpg()
 
-    elif escolha == "APG":
-        apg()
+        elif escolha == "BPG":
+            bpg()
 
-    elif escolha == "SPG":
-        spg()
+        elif escolha == "APG":
+            apg()
 
-    elif escolha == "FG%":
-        fg()
+        elif escolha == "SPG":
+            spg()
 
-    elif escolha == "FT%":
-        ft()
+        elif escolha == "FG%":
+            fg()
 
-    elif escolha == "3FG%":
-        three_fg()
+        elif escolha == "FT%":
+            ft()
+
+        elif escolha == "3FG%":
+            three_fg()
+    
+    elif escolha_do_tipo_de_estatistica == "EA":
+        tabela_das_estatisticas_acumulativas()
+        escolha = input("escolha(escreva a sigla da estatistica que quer saber): ").upper() 
+        longevity_stats = ["LDP", "LDR", "LDA", "LDB", "LDRB", "LDCF", "LDLLF", "LDTF"]
+
+        while escolha not in longevity_stats:
+            print("\nNão está dentre as estatisticas que atualmente possa reconhecer ou escreveste errado! ")
+            escolha = input("escolha(escreva a sigla da estatistica que quer saber): ").upper() 
+        
+        if escolha == "LDP":
+            ldp()
+
+        elif escolha == "LDR":
+            ldr()
+
+        elif escolha == "LDA":
+            lda()
 
 def continua():
     respostas = ["s", "n"]
-    continuar = input("\n quer continuar a ver outras estatisticas(s - sim/n - não)? ")
+    continuar = input("\nquer continuar a ver outras estatisticas(s - sim/n - não)? ").lower()
     while continuar not in respostas:
         print("Resposta não reconhecida(s - sim / n - não)")
-        continuar = input("\n quer continuar a ver outras estatisticas(s - sim/n - não)? ")
+        continuar = input("\nquer continuar a ver outras estatisticas(s - sim/n - não)? ").lower()
     if continuar == "n":
         return False
 
