@@ -1,10 +1,9 @@
 from bs4 import BeautifulSoup
 import requests
-import csv
 
 
 def tabela_das_estatisticas_acumulativas():
-    print("\nEstatisticas acumulativas: \n" + "Lideres de pontos(LDP); \n" + "Lideres de rebotes(LDR); \n" + "Lideres de assistencias(LDA); \n" + "Lideres de blocks(LDB); \n" + "Lideres de roubos de bola(LDRB); \n" + "Lideres de cestos feitos(LDCF); \n" + "lideres de lances livres feitos(LDLLF); \n" + "lideres de triplos feitos(LDTF). \n")
+    print("Estatisticas acumulativas: \n" + "Lideres de pontos(LDP); \n" + "Lideres de rebotes(LDR); \n" + "Lideres de assistencias(LDA); \n" + "Lideres de blocks(LDB); \n" + "Lideres de roubos de bola(LDRB); \n" + "Lideres de cestos feitos(LDCF); \n" + "lideres de lances livres feitos(LDLLF); \n" + "lideres de triplos feitos(LDTF). \n")
 
 def ldp():
     page_to_scrape = requests.get("https://www.statmuse.com/nba/ask?q=most+points+made+all-time")
@@ -12,15 +11,8 @@ def ldp():
     ldps = soup.find_all("text", limit=25, attrs={"class":"fill-black"})
     atletas = soup.find_all("td", limit=25, attrs={"class":"text-left px-2 py-1 sticky left-0 bg-white"})
 
-    file = open("scraped_quotes.csv", "w")
-    writer = csv.writer(file)
-
-    writer.writerow(["Pontos totais", "Atletas"])
-
     for ldp, atleta in zip(ldps, atletas):
         print(ldp.text + " - " + atleta.text)
-        writer.writerow([ldp.text, atleta.text])
-    file.close()
 
 def ldr():
     page_to_scrape = requests.get("https://www.statmuse.com/nba/ask?q=most+rebounds+of+all-time")
@@ -40,59 +32,12 @@ def lda():
     for lda, atleta in zip(ldas, atletas):
         print(lda.text + " - " + atleta.text)
 
-def ldb():
-    page_to_scrape = requests.get("https://www.statmuse.com/nba/ask?q=most+blocks+all-time")
-    soup = BeautifulSoup(page_to_scrape.text, "html.parser")
-    ldbs = soup.find_all("text", limit=25, attrs={"class":"fill-black"})
-    atletas = soup.find_all("td", limit=25, attrs={"class":"text-left px-2 py-1 sticky left-0 bg-white"})
-
-    for ldb, atleta in zip(ldbs, atletas):
-        print(ldb.text + " - " + atleta.text)
-
-def ldrb():
-    page_to_scrape = requests.get("https://www.statmuse.com/nba/ask?q=most+steals+all-time")
-    soup = BeautifulSoup(page_to_scrape.text, "html.parser")
-    ldrbs = soup.find_all("text", limit=25, attrs={"class":"fill-black"})
-    atletas = soup.find_all("td", limit=25, attrs={"class":"text-left px-2 py-1 sticky left-0 bg-white"})
-
-    for ldrb, atleta in zip(ldrbs, atletas):
-        print(ldrb.text + " - " + atleta.text)
-
-def ldcf():
-    page_to_scrape = requests.get("https://www.statmuse.com/nba/ask?q=most+field+goals+made+all-time")
-    soup = BeautifulSoup(page_to_scrape.text, "html.parser")
-    ldcfs = soup.find_all("text", limit=25, attrs={"class":"fill-black"})
-    atletas = soup.find_all("td", limit=25, attrs={"class":"text-left px-2 py-1 sticky left-0 bg-white"})
-
-    for ldcf, atleta in zip(ldcfs, atletas):
-        print(ldcf.text + " - " + atleta.text)
-
-def ldllf():
-    page_to_scrape = requests.get("https://www.statmuse.com/nba/ask?q=most+free+throws+made+all-time")
-    soup = BeautifulSoup(page_to_scrape.text, "html.parser")
-    ldllfs = soup.find_all("text", limit=25, attrs={"class":"fill-black"})
-    atletas = soup.find_all("td", limit=25, attrs={"class":"text-left px-2 py-1 sticky left-0 bg-white"})
-
-    for ldllf, atleta in zip(ldllfs, atletas):
-        print(ldllf.text + " - " + atleta.text)
-
-def ldtf():
-    page_to_scrape = requests.get("https://www.statmuse.com/nba/ask?q=most+three+pointers+made+all-time")
-    soup = BeautifulSoup(page_to_scrape.text, "html.parser")
-    ldtfs = soup.find_all("text", limit=25, attrs={"class":"fill-black"})
-    atletas = soup.find_all("td", limit=25, attrs={"class":"text-left px-2 py-1 sticky left-0 bg-white"})
-
-    for ldtf, atleta in zip(ldtfs, atletas):
-        print(ldtf.text + " - " + atleta.text)
-
-
-
 "---------------------------------"
 
 
 
 def tabela_das_estatisticas_por_jogo():
-    print("\nEstatisticas por jogo: \n" + "Pontos por jogo(PPG); \n" + "Rebotes por jogo(RPG); \n" + "Assistencias por jogo(APG); \n" + "Blocks por jogo(BPG); \n" + "Roubos de bola por jogo(SPG); \n" + "Porcentagem de acerto dos lançamentos(FG%); \n" + "Porcentagem de acerto dos lances livre(FT%); \n" + "Porcentagem de acerto do triplo(3FG%). \n")
+    print("Estatisticas por jogo: \n" + "Pontos por jogo(PPG); \n" + "Rebotes por jogo(RPG); \n" + "Assistencias por jogo(APG); \n" + "Blocks por jogo(BPG); \n" + "Roubos de bola por jogo(SPG); \n" + "Porcentagem de acerto dos lançamentos(FG%); \n" + "Porcentagem de acerto dos lances livre(FT%); \n" + "Porcentagem de acerto do triplo(3FG%). \n")
 
 def ppg():
     page_to_scrape = requests.get("https://www.statmuse.com/nba/ask?q=all-time+ppg+leaders")
@@ -168,8 +113,8 @@ def three_fg():
 
 def base():
     tipo_de_estatistica = ["EA", "EPJ"]
-    print("\nEstatistica acumulativa(EA);")
-    print("Estatistica por jogo(EPJ).\n")
+    print("Estatistica acumulativa(EA);")
+    print("Estatistica por jogo(EPJ).")
     escolha_do_tipo_de_estatistica = input("Escolha a estatistica que queira saber sobre(escreva a sigla): ").upper()
     while escolha_do_tipo_de_estatistica not in tipo_de_estatistica:
         print("Escreveste errado(EPJ - Estatistica por jogo / EA - Estatistica acumulativa)!")
@@ -201,6 +146,9 @@ def base():
         elif escolha == "FG%":
             fg()
 
+        elif escolha == "FT%":
+            ft()
+
         elif escolha == "3FG%":
             three_fg()
     
@@ -221,21 +169,6 @@ def base():
 
         elif escolha == "LDA":
             lda()
-
-        elif escolha == "LDB":
-            ldb()
-
-        elif escolha == "LDRB":
-            ldrb()
-
-        elif escolha == "LDCF":
-            ldcf()
-
-        elif escolha == "LDLLF":
-            ldllf()
-
-        elif escolha == "LDTF":
-            ldtf()
 
 def continua():
     respostas = ["s", "n"]
